@@ -1,44 +1,60 @@
 package AssignRunner;
 import assignment.Associate;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class Solution {
 
     public static void main(String[] args) {
+        Associate[] associates = new Associate[5];
         Scanner scanner = new Scanner(System.in);
-        List<Associate> associates = new ArrayList<>();
 
         for (int i = 0; i < 5; i++) {
-            int id = scanner.nextInt();
-            scanner.nextLine(); 
+            int id = Integer.parseInt(scanner.nextLine());
             String name = scanner.nextLine();
             String technology = scanner.nextLine();
-            int experienceInYears = scanner.nextInt();
-            associates.add(new Associate(id, name, technology, experienceInYears));
+            int experienceInYears = Integer.parseInt(scanner.nextLine());
+            associates[i] = new Associate(id, name, technology, experienceInYears);
         }
 
-
-        scanner.nextLine();
+        System.out.println("Enter the search technology:");
         String searchTechnology = scanner.nextLine();
 
-        List<Associate> filteredAssociates = associatesForGivenTechnology(associates, searchTechnology);
-        for (Associate associate : filteredAssociates) {
-            System.out.println(associate.getId());
+        int count = 0;
+        for (int i = 0; i < 5; i++) {
+            if (associates[i].getTechnology().equalsIgnoreCase(searchTechnology)
+                    && associates[i].getExperienceInYears() % 5 == 0) {
+                System.out.println(associates[i].getId());
+                count++;
+            }
+        }
+
+        if (count == 0) {
+            System.out.println("No associates found with the specified technology and experience.");
         }
 
         scanner.close();
     }
 
-    public static List<Associate> associatesForGivenTechnology(List<Associate> associates, String searchTechnology) {
-        List<Associate> filteredAssociates = new ArrayList<>();
+    public static Associate[] associatesForGivenTechnology(Associate[] associates, String searchTechnology) {
+        // Filtering associates based on searchTechnology and experienceInYears
+        int count = 0;
         for (Associate associate : associates) {
             if (associate.getTechnology().equalsIgnoreCase(searchTechnology)
                     && associate.getExperienceInYears() % 5 == 0) {
-                filteredAssociates.add(associate);
+                count++;
             }
         }
-        return filteredAssociates;
+
+        // Creating a new array to store the filtered associates
+        Associate[] result = new Associate[count];
+        int index = 0;
+        for (Associate associate : associates) {
+            if (associate.getTechnology().equalsIgnoreCase(searchTechnology)
+                    && associate.getExperienceInYears() % 5 == 0) {
+                result[index++] = associate;
+            }
+        }
+
+        return result;
     }
 }
